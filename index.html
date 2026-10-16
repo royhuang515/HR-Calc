@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>回任員工特休年資試算系統</title>
+    <style>
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #f8fafc; margin: 0; padding: 16px; color: #1e293b; }
+        .card { max-width: 650px; margin: 0 auto; background: #ffffff; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); overflow: hidden; border: 1px solid #e2e8f0; }
+        .header { background: #4f46e5; padding: 20px 24px; color: #ffffff; }
+        .header h1 { margin: 0; font-size: 20px; font-weight: 700; }
+        .header p { margin: 4px 0 0 0; font-size: 13px; color: #c7d2fe; }
+        .content { padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+        .section { border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; background-color: #f8fafc; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .section-title { font-size: 15px; font-weight: 700; color: #1e293b; margin: 0; }
+        .section-desc { font-size: 12px; color: #64748b; margin-top: 2px; }
+        .btn-add { background: #eef2ff; color: #4f46e5; border: 1px solid #c7d2fe; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
+        .btn-add:hover { background: #e0e7ff; }
+        .segment-item { border: 1px solid #cbd5e1; background: #ffffff; padding: 14px; border-radius: 10px; margin-bottom: 12px; }
+        .segment-top { display: flex; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; margin-bottom: 12px; }
+        .segment-title { font-size: 12px; font-weight: 700; color: #4f46e5; }
+        .btn-del { color: #f43f5e; background: none; border: none; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+        label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 4px; }
+        input[type="date"], input[type="number"] { width: 100%; padding: 8px 10px; font-size: 13px; border: 1px solid #cbd5e1; border-radius: 8px; background: #ffffff; box-sizing: border-box; }
+        input:focus { outline: 2px solid #6366f1; border-color: transparent; }
+        .btn-calc { width: 100%; background: #4f46e5; color: #ffffff; border: none; font-size: 15px; font-weight: 600; padding: 12px; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2); }
+        .btn-calc:hover { background: #4338ca; }
+        .result-box { background: #f1f5f9; border-top: 1px solid #e2e8f0; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+        .result-card { background: #ffffff; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+        .badge { font-weight: 700; font-size: 14px; padding: 4px 12px; border-radius: 999px; }
+        .badge-green { color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; }
+        .badge-amber { color: #d97706; background: #fffbeb; border: 1px solid #fde68a; }
+        .badge-rose { color: #e11d48; background: #fff1f2; border: 1px solid #fecdd3; }
+        .detail-card { background: #ffffff; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; }
+        .detail-item { display: flex; justify-content: space-between; border-bottom: 1px solid #f8fafc; padding: 8px 0; font-size: 13px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <h1>回任員工特休年資試算系統</h1>
+            <p>支援多段任職期間回任與年資折算</p>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <div class="section-header">
+                    <div>
+                        <div class="section-title">第一部份：原始身分資料</div>
+                        <div class="section-desc">請參照飛騰人員基本資料檔</div>
+                    </div>
+                    <button type="button" onclick="addSegment()" class="btn-add">+ 新增一段</button>
+                </div>
+
+                <div id="segmentsContainer">
+                    <div class="segment-item" data-index="1">
+                        <div class="segment-top">
+                            <span class="segment-title">第 1 段</span>
+                        </div>
+                        <div class="grid-3">
+                            <div>
+                                <label>到職日期 (1A)</label>
+                                <input type="date" class="dateA">
+                            </div>
+                            <div>
+                                <label>離職日期 (1B)</label>
+                                <input type="date" class="dateB">
+                            </div>
+                            <div>
+                                <label>累計留停天數 (1C)</label>
+                                <input type="number" class="daysC" value="0" min="0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title" style="margin-bottom: 12px;">第二部份：新身分資料</div>
+                <div>
+                    <label>D. 新身份到職日</label>
+                    <input type="date" id="dateD">
+                </div>
+            </div>
+
+            <button onclick="calculateSeniority()" class="btn-calc">試算按鈕</button>
+        </div>
+
+        <div id="resultSection" class="result-box hidden">
+            <div style="font-weight: 700; font-size: 15px;">試算結果</div>
+            
+            <div class="result-card">
+                <span style="font-size: 14px; color: #475569;">特休年資類型：</span>
+                <span id="resCategory"></span>
+            </div>
+
+            <div id="layer2Container" class="detail-card">
+                <div style="font-size: 12px; font-weight: 700; color: #4f46e5; margin-bottom: 8px;">第二層詳細計算明細</div>
+                <div id="layer2Details"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function addSegment() {
+            const container = document.getElementById('segmentsContainer');
+            const count = container.children.length + 1;
+            const div = document.createElement('div');
+            div.className = 'segment-item';
+            div.setAttribute('data-index', count);
+            div.innerHTML = `
+                <div class="segment-top">
+                    <span class="segment-title">第 ${count} 段</span>
+                    <button type="button" onclick="removeSegment(this)" class="btn-del">刪除此段</button>
+                </div>
+                <div class="grid-3">
+                    <div>
+                        <label>到職日期 (${count}A)</label>
+                        <input type="date" class="dateA">
+                    </div>
+                    <div>
+                        <label>離職日期 (${count}B)</label>
+                        <input type="date" class="dateB">
+                    </div>
+                    <div>
+                        <label>累計留停天數 (${count}C)</label>
+                        <input type="number" class="daysC" value="0" min="0">
+                    </div>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        function removeSegment(btn) {
+            const container = document.getElementById('segmentsContainer');
+            if (container.children.length === 1) {
+                alert('至少須保留一個任職區段！');
+                return;
+            }
+            btn.closest('.segment-item').remove();
+            const items = container.children;
+            for (let i = 0; i < items.length; i++) {
+                const idx = i + 1;
+                items[i].querySelector('.segment-title').innerText = `第 ${idx} 段`;
+                const labels = items[i].querySelectorAll('label');
+                labels[0].innerText = `到職日期 (${idx}A)`;
+                labels[1].innerText = `離職日期 (${idx}B)`;
+                labels[2].innerText = `累計留停天數 (${idx}C)`;
+            }
+        }
+
+        function getMonthDifference(d1, d2) {
+            let months = (d2.getFullYear() - d1.getFullYear()) * 12;
+            months -= d1.getMonth();
+            months += d2.getMonth();
+            if (d2.getDate() - d1.getDate() < 0) months--;
+            return months;
+        }
+
+        function calculateSeniority() {
+            const segmentElements = document.querySelectorAll('.segment-item');
+            const valD = document.getElementById('dateD').value;
+
+            if (!valD) {
+                alert('請填寫「D. 新身份到職日」！');
+                return;
+            }
+
+            const dateD = new Date(valD);
+            let segments = [];
+
+            for (let item of segmentElements) {
+                const valA = item.querySelector('.dateA').value;
+                const valB = item.querySelector('.dateB').value;
+                const daysC = parseInt(item.querySelector('.daysC').value) || 0;
+
+                if (!valA || !valB) {
+                    alert('請完整填寫所有任職區段的「到職日期」與「離職日期」！');
+                    return;
+                }
+
+                const dateA = new Date(valA);
+                const dateB = new Date(valB);
+
+                if (dateB < dateA) {
+                    alert('錯誤：離職日期不得早於到職日期！');
+                    return;
+                }
+                segments.push({ dateA, dateB, daysC, valA, valB });
+            }
+
+            segments.sort((a, b) => a.dateA - b.dateA);
+
+            const lastSegment = segments[segments.length - 1];
+            const date3M = new Date(lastSegment.valB);
+            date3M.setMonth(date3M.getMonth() + 3);
+
+            const date6M = new Date(lastSegment.valB);
+            date6M.setMonth(date6M.getMonth() + 6);
+
+            let category = "", badgeClass = "";
+
+            if (dateD <= date3M) {
+                category = "3個月內";
+                badgeClass = "badge badge-green";
+            } else if (dateD <= date6M) {
+                category = "6個月內";
+                badgeClass = "badge badge-amber";
+            } else {
+                category = "不符合回任標準";
+                badgeClass = "badge badge-rose";
+            }
+
+            const resCatElem = document.getElementById('resCategory');
+            resCatElem.innerText = category;
+            resCatElem.className = badgeClass;
+
+            const layer2Container = document.getElementById('layer2Container');
+            const layer2Details = document.getElementById('layer2Details');
+
+            if (category === "不符合回任標準") {
+                layer2Container.classList.add('hidden');
+            } else {
+                layer2Container.classList.remove('hidden');
+                const n = segments.length;
+                let totalOriginalDays = 0, totalC = 0, originalDetailsHtml = "";
+
+                segments.forEach((seg, idx) => {
+                    const rawAB = Math.round((seg.dateB.getTime() - seg.dateA.getTime()) / (1000 * 3600 * 24)) + 1;
+                    const netAB = rawAB - seg.daysC;
+                    totalOriginalDays += netAB;
+                    totalC += seg.daysC;
+
+                    if (n === 1) {
+                        originalDetailsHtml = `<div class="detail-item"><span>1. 原始年資天數：</span><b>${netAB} 天</b></div>`;
+                    } else {
+                        if (idx === 0) originalDetailsHtml += `<div class="detail-item"><span>1. 原始年資天數：</span><b>(${netAB}`;
+                        else originalDetailsHtml += ` + ${netAB}`;
+                    }
+                });
+
+                if (n > 1) originalDetailsHtml += `) = <span style="color:#4f46e5;">${totalOriginalDays} 天</span></b></div>`;
+
+                let breakDaysTotal = 0;
+                if (n === 1) {
+                    const prevDayD = new Date(dateD);
+                    prevDayD.setDate(prevDayD.getDate() - 1);
+                    breakDaysTotal = Math.round((prevDayD.getTime() - segments[0].dateB.getTime()) / (1000 * 3600 * 24));
+                } else {
+                    let runningBreak = 0;
+                    for (let i = 1; i < n; i++) {
+                        const prevA = new Date(segments[i].dateA);
+                        prevA.setDate(prevA.getDate() - 1);
+                        runningBreak += Math.round((prevA.getTime() - segments[i-1].dateB.getTime()) / (1000 * 3600 * 24));
+                    }
+                    const prevDayD = new Date(dateD);
+                    prevDayD.setDate(prevDayD.getDate() - 1);
+                    runningBreak += Math.round((prevDayD.getTime() - segments[n-1].dateB.getTime()) / (1000 * 3600 * 24));
+                    breakDaysTotal = runningBreak;
+                }
+
+                const breakFormulaHtml = `<div class="detail-item"><span>2. 中斷年資天數：</span><b>${breakDaysTotal} 天</b></div>`;
+                const firstA = segments[0].dateA;
+                let newSeniorityDate = new Date(firstA);
+
+                if (category === "3個月內") {
+                    newSeniorityDate.setDate(newSeniorityDate.getDate() + totalC + breakDaysTotal);
+                    layer2Details.innerHTML = `${originalDetailsHtml}${breakFormulaHtml}<div class="detail-item" style="color:#4f46e5; font-weight:bold;"><span>3. 新特休年資日期：</span><span>${newSeniorityDate.toISOString().split('T')[0]}</span></div>`;
+                } else if (category === "6個月內") {
+                    const adjustedSeniority = Math.round(totalOriginalDays * 0.5);
+                    newSeniorityDate.setDate(newSeniorityDate.getDate() + adjustedSeniority + breakDaysTotal);
+                    layer2Details.innerHTML = `${originalDetailsHtml}<div class="detail-item"><span>   折半計算 (原始年資 × 0.5)：</span><b>${adjustedSeniority} 天</b></div>${breakFormulaHtml}<div class="detail-item" style="color:#4f46e5; font-weight:bold;"><span>3. 新特休年資日期：</span><span>${newSeniorityDate.toISOString().split('T')[0]}</span></div>`;
+                }
+            }
+
+            document.getElementById('resultSection').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
