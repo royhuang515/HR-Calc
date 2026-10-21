@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>到職員工計算工具 - 像素風</title>
-    <!-- 引入復古像素字體 -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@700;900&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; font-family: 'Noto Sans TC', monospace, sans-serif; image-rendering: pixelated; }
         
         body { 
-            background-color: #FFFFFF; /* 背景改為白色 */
+            background-color: #FFFFFF; 
             margin: 0; 
             padding: 24px; 
             color: #111111; 
@@ -22,62 +21,40 @@
             overflow-x: hidden;
         }
 
-        /* 像素化大樹裝飾 (3-4顆，散落於背景四周，不滿版) */
-        .pixel-tree {
-            position: absolute;
-            width: 48px;
-            height: 64px;
+        /* 滿版像素大樹與背景裝飾 */
+        .pixel-bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: 
+                radial-gradient(#70AD47 15%, transparent 16%),
+                radial-gradient(#70AD47 15%, transparent 16%);
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px;
+            opacity: 0.25;
             z-index: 0;
             pointer-events: none;
         }
-        /* 樹冠 (像素綠) */
-        .pixel-tree::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 48px;
-            height: 44px;
-            background: #70AD47;
-            border: 3px solid #111111;
-            box-shadow: 3px 3px 0px #111111;
-        }
-        /* 樹幹 (咖啡色) */
-        .pixel-tree::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 18px;
-            width: 12px;
-            height: 20px;
-            background: #8B5A2B;
-            border: 3px solid #111111;
-        }
-
-        /* 散落位置設定 */
-        .tree-1 { top: 10%; left: 8%; transform: scale(1.2); }
-        .tree-2 { top: 15%; right: 10%; transform: scale(0.9); }
-        .tree-3 { bottom: 12%; left: 12%; transform: scale(1); }
-        .tree-4 { bottom: 15%; right: 8%; transform: scale(1.3); }
 
         .pixel-container { 
             width: 100%;
             max-width: 680px; 
-            background: #70AD47; /* 主要區塊維持色號 #70AD47 */
+            background: #70AD47; 
             border: 4px solid #111111;
             box-shadow: 8px 8px 0px #111111;
             padding: 24px;
             position: relative;
-            z-index: 1; /* 確保內容在樹的上方 */
+            z-index: 1; 
         }
 
-        /* 像素風大標題 (第一層) */
         .pixel-header { 
             text-align: center;
             margin-bottom: 30px;
             padding: 15px;
             border: 4px solid #111111;
-            background: #FFD966; /* 按鈕色 */
+            background: #FFD966; 
             box-shadow: 4px 4px 0px #111111;
         }
         .pixel-header h1 { 
@@ -88,7 +65,6 @@
             letter-spacing: 2px;
         }
 
-        /* 第二層透明標題區塊 */
         .pixel-transparent-header {
             text-align: center;
             margin-bottom: 25px;
@@ -111,11 +87,9 @@
             text-shadow: 1px 1px 0px #111111;
         }
 
-        /* 畫面管理 */
         .screen-pane { display: none; }
         .screen-pane.active { display: block; }
 
-        /* 第一層主選單按鈕 (左右並排) */
         .main-menu-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -123,7 +97,7 @@
             margin-top: 20px;
         }
         .pixel-big-btn {
-            background: #FFD966; /* 按鈕色 */
+            background: #FFD966; 
             border: 4px solid #111111;
             box-shadow: 4px 4px 0px #111111;
             padding: 30px 15px;
@@ -147,13 +121,10 @@
             transform: translate(2px, 2px);
             box-shadow: 2px 2px 0px #111111;
         }
-        .pixel-icon {
-            font-size: 28px;
-        }
+        .pixel-icon { font-size: 28px; }
 
-        /* 通用像素按鈕與欄位 */
         .pixel-btn {
-            background: #FFD966; /* 按鈕色 */
+            background: #FFD966; 
             border: 3px solid #111111;
             box-shadow: 3px 3px 0px #111111;
             padding: 12px 20px;
@@ -182,9 +153,7 @@
         }
         .pixel-btn-secondary:hover { background: #f0f0f0; }
 
-        .pixel-input-group {
-            margin-bottom: 16px;
-        }
+        .pixel-input-group { margin-bottom: 16px; }
         .pixel-input-group label {
             display: block;
             font-size: 13px;
@@ -198,14 +167,13 @@
             padding: 10px;
             font-size: 15px;
             border: 3px solid #111111;
-            background: #FFD966; /* 輸入欄位處依色號 */
+            background: #FFD966; 
             font-weight: 700;
             color: #111111;
             box-shadow: 2px 2px 0px #111111;
             outline: none;
         }
 
-        /* 選項清單 (問答) */
         .pixel-options-col {
             display: flex;
             flex-direction: column;
@@ -213,7 +181,7 @@
             margin-bottom: 20px;
         }
         .pixel-opt-btn {
-            background: #FFD966; /* 按鈕色 */
+            background: #FFD966; 
             border: 3px solid #111111;
             box-shadow: 3px 3px 0px #111111;
             padding: 14px 18px;
@@ -232,7 +200,6 @@
             box-shadow: 4px 4px 0px #111111;
         }
 
-        /* 結果顯示卡片 */
         .pixel-result-box {
             background: #ffffff;
             border: 3px solid #111111;
@@ -270,15 +237,12 @@
 </head>
 <body>
 
-    <!-- 背景像素大樹裝飾 (4顆) -->
-    <div class="pixel-tree tree-1"></div>
-    <div class="pixel-tree tree-2"></div>
-    <div class="pixel-tree tree-3"></div>
-    <div class="pixel-tree tree-4"></div>
+    <!-- 滿版像素背景圖樣 -->
+    <div class="pixel-bg-pattern"></div>
 
     <div class="pixel-container">
         
-        <!-- ==================== 第一層畫面 (主選單) ==================== -->
+        <!-- 第一層畫面 (主選單) -->
         <div id="screenHome" class="screen-pane active">
             <div class="pixel-header">
                 <h1>到職員工計算工具</h1>
@@ -298,7 +262,7 @@
             </div>
         </div>
 
-        <!-- ==================== 第二層畫面：身份判斷 ==================== -->
+        <!-- 第二層畫面：身份判斷 -->
         <div id="screenIdentity" class="screen-pane">
             <div class="pixel-transparent-header">
                 <h2>【 身份判斷精靈 】</h2>
@@ -306,6 +270,353 @@
             </div>
 
             <!-- 標題A -->
-            <div id="idStepA" class="id-step active">
+            <div id="idStepA" class="id-step">
                 <div style="font-weight: 900; font-size: 15px; color: #ffffff; text-shadow: 1px 1px 0px #111111; margin-bottom: 6px;">請問員工是否曾經於公司任職過?</div>
-                <div style="font-size
+                <div style="font-size: 12px; color: #ffffcc; margin-bottom: 16px;">曾經任職過直營體系，僅任職過加盟店請選"否"</div>
+                <div class="pixel-options-col">
+                    <button class="pixel-opt-btn" onclick="idGoToStep('idStepB')"><span>是</span><span>➔</span></button>
+                    <button class="pixel-opt-btn" onclick="showIdResult('A')"><span>否</span><span>➔</span></button>
+                </div>
+            </div>
+
+            <!-- 標題B -->
+            <div id="idStepB" class="id-step hidden">
+                <div style="font-weight: 900; font-size: 15px; color: #ffffff; text-shadow: 1px 1px 0px #111111; margin-bottom: 6px;">員工本次異動是否為身份(PT/FT)或加盟直營之間轉換?</div>
+                <div style="font-size: 12px; color: #ffffcc; margin-bottom: 16px;">若非上述情況請選否</div>
+                <div class="pixel-options-col">
+                    <button class="pixel-opt-btn" onclick="idGoToStep('idStepC')"><span>是</span><span>➔</span></button>
+                    <button class="pixel-opt-btn" onclick="idGoToStep('idStepD')"><span>否</span><span>➔</span></button>
+                </div>
+                <button class="pixel-btn-secondary" onclick="idGoToStep('idStepA')">◀ 返回上一頁</button>
+            </div>
+
+            <!-- 標題C -->
+            <div id="idStepC" class="id-step hidden">
+                <div style="font-weight: 900; font-size: 15px; color: #ffffff; text-shadow: 1px 1px 0px #111111; margin-bottom: 6px;">員工本次轉換之間是否有中斷在職的情況?</div>
+                <div style="font-size: 12px; color: #ffffcc; margin-bottom: 16px;">例如工讀離職1個月後，以正職回任則有中斷在職</div>
+                <div class="pixel-options-col">
+                    <button class="pixel-opt-btn" onclick="idGoToStep('idStepD')"><span>是</span><span>➔</span></button>
+                    <button class="pixel-opt-btn" onclick="showIdResult('B')"><span>否</span><span>➔</span></button>
+                </div>
+                <button class="pixel-btn-secondary" onclick="idGoToStep('idStepB')">◀ 返回上一頁</button>
+            </div>
+
+            <!-- 標題D -->
+            <div id="idStepD" class="id-step hidden">
+                <div style="font-weight: 900; font-size: 15px; color: #ffffff; text-shadow: 1px 1px 0px #111111; margin-bottom: 6px;">員工距離前次任職，中斷期間是否超過6個月?</div>
+                <div style="font-size: 12px; color: #ffffcc; margin-bottom: 16px;">例如前一任職12/31離職；本次8/1到職則有超過6個月</div>
+                
+                <div class="pixel-input-group">
+                    <label>前一身份離職日期 (D1)</label>
+                    <input type="date" id="inputD1">
+                </div>
+                <div class="pixel-input-group">
+                    <label>本次預計到職日期 (D2)</label>
+                    <input type="date" id="inputD2">
+                </div>
+                <div id="calcResultD" style="font-size: 13px; font-weight: 900; color: #111111; background: #FFD966; border: 2px solid #111111; padding: 10px; margin-bottom: 14px; display: none; box-shadow: 2px 2px 0px #111111;"></div>
+
+                <div style="display: flex; gap: 10px;">
+                    <button class="pixel-btn" onclick="calcStepD()" style="margin-top:0;">試算中斷月數</button>
+                    <button class="pixel-btn" onclick="confirmStepD()" style="margin-top:0; background:#99ff99;">確認送出</button>
+                </div>
+                <button class="pixel-btn-secondary" onclick="idGoToStep('idStepB')">◀ 返回上一頁</button>
+            </div>
+
+            <!-- 身份判斷結果顯示區 -->
+            <div id="idResultContainer" class="hidden">
+                <div id="idResultContent"></div>
+                <button class="pixel-btn" onclick="resetIdentityWizard()" style="margin-top: 15px;">重新判定身份</button>
+            </div>
+
+            <div style="margin-top: 20px; text-align: center;">
+                <button class="pixel-btn-secondary" onclick="switchScreen('screenHome')">🏠 返回主選單</button>
+            </div>
+        </div>
+
+        <!-- 第二層畫面：年資計算 -->
+        <div id="screenSeniority" class="screen-pane">
+            <div class="pixel-transparent-header">
+                <h2>【 回任年資計算工具 】</h2>
+                <p>支援多段任職期間回任與年資折算試算</p>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.1); border: 3px solid #111111; padding: 16px; margin-bottom: 16px; box-shadow: 3px 3px 0px #111111;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div>
+                        <div style="font-weight: 900; font-size: 14px; color: #ffffff; text-shadow: 1px 1px 0px #111111;">第一部份：原始身分資料</div>
+                        <div style="font-size: 11px; color: #ffffcc;">請參照飛騰人員基本資料檔</div>
+                    </div>
+                    <button type="button" onclick="addSegment()" class="pixel-btn" style="width: auto; padding: 6px 12px; margin: 0; font-size: 12px;">+ 新增一段</button>
+                </div>
+
+                <div id="segmentsContainer">
+                    <div class="segment-item" data-index="1" style="background: #ffffff; border: 2px solid #111111; padding: 12px; margin-bottom: 10px; box-shadow: 2px 2px 0px #111111;">
+                        <div style="font-size: 12px; font-weight: 900; color: #111111; margin-bottom: 8px; border-bottom: 2px solid #111111; padding-bottom: 4px;">第 1 段</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                            <div>
+                                <label style="font-size: 11px; font-weight: 900; color: #111111; margin-bottom: 4px; display: block;">到職日期 (1A)</label>
+                                <input type="date" class="dateA" style="width:100%;border:2px solid #111111;padding:6px;background:#FFD966;font-weight:bold;">
+                            </div>
+                            <div>
+                                <label style="font-size: 11px; font-weight: 900; color: #111111; margin-bottom: 4px; display: block;">離職日期 (1B)</label>
+                                <input type="date" class="dateB" style="width:100%;border:2px solid #111111;padding:6px;background:#FFD966;font-weight:bold;">
+                            </div>
+                            <div>
+                                <label style="font-size: 11px; font-weight: 900; color: #111111; margin-bottom: 4px; display: block;">留停天數 (1C)</label>
+                                <input type="number" class="daysC" value="0" min="0" style="width:100%;border:2px solid #111111;padding:6px;background:#FFD966;font-weight:bold;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.1); border: 3px solid #111111; padding: 16px; margin-bottom: 16px; box-shadow: 3px 3px 0px #111111;">
+                <div style="font-weight: 900; font-size: 14px; color: #ffffff; text-shadow: 1px 1px 0px #111111; margin-bottom: 8px;">第二部份：新身分資料</div>
+                <div>
+                    <label style="font-size: 12px; font-weight: 900; color: #ffffff; text-shadow: 1px 1px 0px #111111; display: block; margin-bottom: 4px;">D. 新身份到職日</label>
+                    <input type="date" id="dateD" style="width:100%;border:3px solid #111111;padding:10px;background:#FFD966;font-weight:bold;box-shadow:2px 2px 0px #111111;">
+                </div>
+            </div>
+
+            <button onclick="calculateSeniority()" class="pixel-btn" style="background: #FFD966; font-size: 16px; padding: 14px;">開始試算年資</button>
+
+            <div id="resultSection" class="hidden" style="margin-top: 16px; background: #ffffff; border: 3px solid #111111; padding: 16px; box-shadow: 4px 4px 0px #111111;">
+                <div style="font-weight: 900; font-size: 15px; margin-bottom: 12px; border-bottom: 2px solid #111111; padding-bottom: 4px;">試算結果</div>
+                <div style="margin-bottom: 10px; font-weight: 900;">
+                    特休年資類型：<span id="resCategory"></span>
+                </div>
+                <div id="layer2Container" style="font-size: 13px; font-weight: 700; background: #f0f0f0; border: 2px solid #111111; padding: 10px;">
+                    <div style="margin-bottom: 6px; font-weight: 900; color: #70AD47;">詳細計算明細：</div>
+                    <div id="layer2Details"></div>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; text-align: center;">
+                <button class="pixel-btn-secondary" onclick="switchScreen('screenHome')">🏠 返回主選單</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function switchScreen(screenId) {
+            document.querySelectorAll('.screen-pane').forEach(pane => pane.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            if (screenId === 'screenIdentity') {
+                resetIdentityWizard();
+            }
+        }
+
+        function idGoToStep(stepId) {
+            document.querySelectorAll('.id-step').forEach(step => step.classList.add('hidden'));
+            document.getElementById(stepId).classList.remove('hidden');
+        }
+
+        function resetIdentityWizard() {
+            document.getElementById('inputD1').value = '';
+            document.getElementById('inputD2').value = '';
+            document.getElementById('calcResultD').style.display = 'none';
+            document.getElementById('idResultContainer').classList.add('hidden');
+            idGoToStep('idStepA');
+        }
+
+        function calcStepD() {
+            const d1Val = document.getElementById('inputD1').value;
+            const d2Val = document.getElementById('inputD2').value;
+            const resDiv = document.getElementById('calcResultD');
+
+            if (!d1Val || !d2Val) {
+                alert('請完整填寫離職日期與預計到職日期！');
+                return;
+            }
+
+            const d1 = new Date(d1Val);
+            const d2 = new Date(d2Val);
+
+            if (d2 < d1) {
+                alert('到職日期不得早於離職日期！');
+                return;
+            }
+
+            let months = (d2.getFullYear() - d1.getFullYear()) * 12;
+            months -= d1.getMonth();
+            months += d2.getMonth();
+            if (d2.getDate() < d1.getDate()) months--;
+
+            const isGt6 = months > 6;
+            resDiv.style.display = 'block';
+            resDiv.innerText = `試算結果：中斷約 ${months} 個月 ➔ 判定為「${isGt6 ? '是 (大於6個月)' : '否 (小於6個月)'}」`;
+        }
+
+        function confirmStepD() {
+            const d1Val = document.getElementById('inputD1').value;
+            const d2Val = document.getElementById('inputD2').value;
+
+            if (!d1Val || !d2Val) {
+                alert('請先填寫日期！');
+                return;
+            }
+
+            const d1 = new Date(d1Val);
+            const d2 = new Date(d2Val);
+
+            let months = (d2.getFullYear() - d1.getFullYear()) * 12;
+            months -= d1.getMonth();
+            months += d2.getMonth();
+            if (d2.getDate() < d1.getDate()) months--;
+
+            if (months > 6) {
+                showIdResult('A');
+            } else {
+                showIdResult('C');
+            }
+        }
+
+        function showIdResult(type) {
+            document.querySelectorAll('.id-step').forEach(step => step.classList.add('hidden'));
+            const resContainer = document.getElementById('idResultContainer');
+            const resContent = document.getElementById('idResultContent');
+            resContainer.classList.remove('hidden');
+
+            if (type === 'A') {
+                resContent.innerHTML = `
+                    <div class="pixel-result-box"><div class="pixel-result-title">👤 身份判定</div><div class="pixel-result-content"><span class="pixel-badge badge-blue">新進員工</span></div></div>
+                    <div class="pixel-result-box"><div class="pixel-result-title">📋 適用流程</div><div class="pixel-result-content">請登載入新人報到系統，並依據報到規定收繳新進員工到職資料、及相關合約。</div></div>
+                    <div class="pixel-result-box"><div class="pixel-result-title">📁 應備資料</div><div class="pixel-result-content">錄取核薪單</div></div>
+                    <div class="pixel-result-box"><div class="pixel-result-title">⏳ 特休年資計算</div><div class="pixel-result-content">自到職日期起算</div></div>
+                `;
+            } else if (type === 'B') {
+                resContent.innerHTML = `
+                    <div class="pixel-result-box"><div class="pixel-result-title">👤 身份判定</div><div class="pixel-result-content"><span class="pixel-badge badge-purple">在職員工</span></div></div>
+                    <div class="pixel-result-box"><div class="pixel-result-title">📋 適用流程</div><div class="pixel-result-content">適用人事異動流程，請核對員工薪資資料並填寫職務異動單於生效日期前繳回薪酬單位。</div></div>
+                    <div class="pixel-result-box"><div class="pixel-result-title">📁 應備資料</div><div class="pixel-result-content">職務異動單</div></div>
+                    <div class="pixel-result-box"><div class="pixel-result-title">⏳ 特休年資計算</div><div class="pixel-result-content">合併前一身份計算。</div></div>
+                `;
+            } else if (type === 'C') {
+                resContent.innerHTML = `
+                    <div class="pixel-result-box"><div class="pixel-result-title">👤 身份判定</div><div class="pixel-result-content"><span class="pixel-badge badge-green">回任員工</span></div></div>
+                    <div class="pixel-result-box"><div class="pixel-result-title">📋 適用流程</div><div class="pixel-result-content">請登載入新人報到系統，並依據報到規定收繳新進員工到職資料、及相關合約。</div></div>
+                    <div class="pixel-result-box"><div class="pixel-result-title">📁 應備資料</div><div class="pixel-result-content">錄取核薪單</div></div>
+                    <div class="pixel-result-box"><div class="pixel-result-title">⏳ 特休年資計算</div><div class="pixel-result-content">1. 中斷年資3個月內：合併前一身份完整年資<br>2. 中斷年資大於3個月、小於6個月：合併前一年身份年資*0.5</div></div>
+                `;
+            }
+        }
+
+        function addSegment() {
+            const container = document.getElementById('segmentsContainer');
+            const count = container.children.length + 1;
+            const div = document.createElement('div');
+            div.className = 'segment-item';
+            div.style.cssText = "background: #ffffff; border: 2px solid #111111; padding: 12px; margin-bottom: 10px; box-shadow: 2px 2px 0px #111111;";
+            div.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 2px solid #111111; padding-bottom: 4px;">
+                    <span style="font-size: 12px; font-weight: 900; color: #111111;">第 ${count} 段</span>
+                    <button type="button" onclick="this.closest('.segment-item').remove()" style="color: #ff3333; background: none; border: none; font-weight: 900; cursor: pointer;">[刪除]</button>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label style="font-size: 11px; font-weight: 900; color: #111111; margin-bottom: 4px; display: block;">到職日期 (${count}A)</label>
+                        <input type="date" class="dateA" style="width:100%;border:2px solid #111111;padding:6px;background:#FFD966;font-weight:bold;">
+                    </div>
+                    <div>
+                        <label style="font-size: 11px; font-weight: 900; color: #111111; margin-bottom: 4px; display: block;">離職日期 (${count}B)</label>
+                        <input type="date" class="dateB" style="width:100%;border:2px solid #111111;padding:6px;background:#FFD966;font-weight:bold;">
+                    </div>
+                    <div>
+                        <label style="font-size: 11px; font-weight: 900; color: #111111; margin-bottom: 4px; display: block;">留停天數 (${count}C)</label>
+                        <input type="number" class="daysC" value="0" min="0" style="width:100%;border:2px solid #111111;padding:6px;background:#FFD966;font-weight:bold;">
+                    </div>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        function calculateSeniority() {
+            const segmentElements = document.querySelectorAll('.segment-item');
+            const valD = document.getElementById('dateD').value;
+
+            if (!valD) {
+                alert('請填寫新身份到職日 (D)！');
+                return;
+            }
+
+            const dateD = new Date(valD);
+            let segments = [];
+
+            for (let item of segmentElements) {
+                const valA = item.querySelector('.dateA').value;
+                const valB = item.querySelector('.dateB').value;
+                const daysC = parseInt(item.querySelector('.daysC').value) || 0;
+
+                if (!valA || !valB) {
+                    alert('請完整填寫所有任職區段的到職與離職日期！');
+                    return;
+                }
+
+                const dateA = new Date(valA);
+                const dateB = new Date(valB);
+
+                if (dateB < dateA) {
+                    alert('離職日期不得早於到職日期！');
+                    return;
+                }
+                segments.push({ dateA, dateB, daysC, valA, valB });
+            }
+
+            segments.sort((a, b) => a.dateA - b.dateA);
+
+            const lastSegment = segments[segments.length - 1];
+            const date3M = new Date(lastSegment.valB);
+            date3M.setMonth(date3M.getMonth() + 3);
+
+            const date6M = new Date(lastSegment.valB);
+            date6M.setMonth(date6M.getMonth() + 6);
+
+            let category = "", badgeClass = "";
+            if (dateD <= date3M) {
+                category = "3個月內回任";
+                badgeClass = "pixel-badge badge-green";
+            } else if (dateD <= date6M) {
+                category = "6個月內回任";
+                badgeClass = "pixel-badge badge-blue";
+            } else {
+                category = "不符合回任標準";
+                badgeClass = "pixel-badge";
+            }
+
+            const resCatElem = document.getElementById('resCategory');
+            resCatElem.innerHTML = `<span class="${badgeClass}">${category}</span>`;
+
+            const layer2Details = document.getElementById('layer2Details');
+            if (category === "不符合回任標準") {
+                layer2Details.innerHTML = "超過離職後 6 個月，視同一般新進人員重新起算年資。";
+            } else {
+                let totalOriginalDays = 0, totalC = 0;
+                segments.forEach(seg => {
+                    const rawAB = Math.round((seg.dateB.getTime() - seg.dateA.getTime()) / (1000 * 3600 * 24)) + 1;
+                    totalOriginalDays += (rawAB - seg.daysC);
+                    totalC += seg.daysC;
+                });
+
+                let breakDaysTotal = 0;
+                const prevDayD = new Date(dateD);
+                prevDayD.setDate(prevDayD.getDate() - 1);
+                breakDaysTotal = Math.round((prevDayD.getTime() - segments[segments.length-1].dateB.getTime()) / (1000 * 3600 * 24));
+
+                let newSeniorityDate = new Date(segments[0].dateA);
+                if (category === "3個月內回任") {
+                    newSeniorityDate.setDate(newSeniorityDate.getDate() + totalC + breakDaysTotal);
+                    layer2Details.innerHTML = `原始年資天數：${totalOriginalDays} 天<br>中斷天數：${breakDaysTotal} 天<br><b>新特休起算日：${newSeniorityDate.toISOString().split('T')[0]}</b>`;
+                } else {
+                    const adj = Math.round(totalOriginalDays * 0.5);
+                    newSeniorityDate.setDate(newSeniorityDate.getDate() + adj + breakDaysTotal);
+                    layer2Details.innerHTML = `原始年資折半 (×0.5)：${adj} 天<br>中斷天數：${breakDaysTotal} 天<br><b>新特休起算日：${newSeniorityDate.toISOString().split('T')[0]}</b>`;
+                }
+            }
+
+            document.getElementById('resultSection').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
