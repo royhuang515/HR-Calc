@@ -6,66 +6,66 @@
     <title>到職員工計算工具</title>
     <style>
         * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: #f8fafc; margin: 0; padding: 16px; color: #1e293b; }
-        .card { max-width: 650px; margin: 0 auto; background: #ffffff; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); overflow: hidden; border: 1px solid #e2e8f0; }
-        .header { background: #4f46e5; padding: 20px 24px; color: #ffffff; }
-        .header h1 { margin: 0; font-size: 20px; font-weight: 700; }
-        .header p { margin: 4px 0 0 0; font-size: 13px; color: #c7d2fe; }
+        body { background-color: #f8fafc; margin: 0; padding: 24px; color: #1e293b; font-size: 16px; } /* 放大整體預設字體 */
+        .card { max-width: 720px; margin: 0 auto; background: #ffffff; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); overflow: hidden; border: 1px solid #e2e8f0; }
+        .header { background: #4f46e5; padding: 24px 28px; color: #ffffff; }
+        .header h1 { margin: 0; font-size: 22px; font-weight: 700; }
+        .header p { margin: 6px 0 0 0; font-size: 14px; color: #c7d2fe; }
 
         /* 頁籤導航 */
         .tabs { display: flex; background: #eef2ff; border-bottom: 1px solid #cbd5e1; }
-        .tab-btn { flex: 1; padding: 14px; text-align: center; background: none; border: none; font-size: 14px; font-weight: 700; color: #64748b; cursor: pointer; transition: all 0.2s; }
+        .tab-btn { flex: 1; padding: 16px; text-align: center; background: none; border: none; font-size: 15px; font-weight: 700; color: #64748b; cursor: pointer; transition: all 0.2s; }
         .tab-btn.active { background: #ffffff; color: #4f46e5; border-bottom: 3px solid #4f46e5; }
 
-        .content { padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+        .content { padding: 28px; display: flex; flex-direction: column; gap: 20px; }
         .tab-pane { display: none; }
         .tab-pane.active { display: block; }
 
-        .section { border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; background-color: #f8fafc; margin-bottom: 16px; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .section-title { font-size: 15px; font-weight: 700; color: #1e293b; margin: 0; }
-        .section-desc { font-size: 12px; color: #64748b; margin-top: 2px; }
-        .btn-add { background: #eef2ff; color: #4f46e5; border: 1px solid #c7d2fe; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
+        .section { border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; background-color: #f8fafc; margin-bottom: 16px; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .section-title { font-size: 16px; font-weight: 700; color: #1e293b; margin: 0; }
+        .section-desc { font-size: 13px; color: #64748b; margin-top: 4px; }
+        .btn-add { background: #eef2ff; color: #4f46e5; border: 1px solid #c7d2fe; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
         .btn-add:hover { background: #e0e7ff; }
 
-        .segment-item { border: 1px solid #cbd5e1; background: #ffffff; padding: 14px; border-radius: 10px; margin-bottom: 12px; }
+        .segment-item { border: 1px solid #cbd5e1; background: #ffffff; padding: 16px; border-radius: 10px; margin-bottom: 12px; }
         .segment-top { display: flex; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; margin-bottom: 12px; }
-        .segment-title { font-size: 12px; font-weight: 700; color: #4f46e5; }
-        .btn-del { color: #f43f5e; background: none; border: none; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .segment-title { font-size: 13px; font-weight: 700; color: #4f46e5; }
+        .btn-del { color: #f43f5e; background: none; border: none; font-size: 13px; font-weight: 600; cursor: pointer; }
         
-        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
-        label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 4px; }
-        input[type="date"], input[type="number"] { width: 100%; padding: 8px 10px; font-size: 13px; border: 1px solid #cbd5e1; border-radius: 8px; background: #ffffff; box-sizing: border-box; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+        label { display: block; font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 6px; }
+        input[type="date"], input[type="number"] { width: 100%; padding: 10px 12px; font-size: 15px; border: 1px solid #cbd5e1; border-radius: 8px; background: #ffffff; box-sizing: border-box; }
         input:focus { outline: 2px solid #6366f1; border-color: transparent; }
 
-        .btn-calc, .btn-primary { width: 100%; background: #4f46e5; color: #ffffff; border: none; font-size: 15px; font-weight: 600; padding: 12px; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2); }
+        .btn-calc, .btn-primary { width: 100%; background: #4f46e5; color: #ffffff; border: none; font-size: 16px; font-weight: 600; padding: 14px; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2); }
         .btn-calc:hover, .btn-primary:hover { background: #4338ca; }
-        .btn-secondary { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+        .btn-secondary { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 10px; }
         .btn-secondary:hover { background: #e2e8f0; }
 
         /* 身份判斷精靈樣式 */
         .step-box { display: none; }
         .step-box.active { display: block; }
-        .q-title { font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 6px; }
-        .q-desc { font-size: 13px; color: #64748b; margin-bottom: 16px; }
-        .options-col { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
-        .opt-btn { background: #ffffff; border: 1px solid #cbd5e1; padding: 12px 16px; border-radius: 10px; text-align: left; font-size: 14px; font-weight: 600; color: #334155; cursor: pointer; transition: all 0.2s; display: flex; justify-content: space-between; }
+        .q-title { font-size: 18px; font-weight: 700; color: #1e293b; margin-bottom: 8px; line-height: 1.4; }
+        .q-desc { font-size: 14px; color: #64748b; margin-bottom: 20px; line-height: 1.5; }
+        .options-col { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+        .opt-btn { background: #ffffff; border: 1px solid #cbd5e1; padding: 16px 20px; border-radius: 12px; text-align: left; font-size: 15px; font-weight: 600; color: #334155; cursor: pointer; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center; }
         .opt-btn:hover { background: #eef2ff; border-color: #6366f1; color: #4f46e5; }
 
         /* 結果展示區塊 */
-        .result-block-container { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
-        .result-block { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
-        .result-block-title { font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
-        .result-block-content { font-size: 14px; font-weight: 600; color: #1e293b; line-height: 1.5; }
+        .result-block-container { display: flex; flex-direction: column; gap: 14px; margin-top: 15px; }
+        .result-block { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+        .result-block-title { font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+        .result-block-content { font-size: 15px; font-weight: 600; color: #1e293b; line-height: 1.6; }
 
         .result-box { background: #f1f5f9; border-top: 1px solid #e2e8f0; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
-        .result-card { background: #ffffff; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
-        .badge { font-weight: 700; font-size: 14px; padding: 4px 12px; border-radius: 999px; }
+        .result-card { background: #ffffff; padding: 18px; border-radius: 12px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; font-size: 15px; }
+        .badge { font-weight: 700; font-size: 15px; padding: 6px 14px; border-radius: 999px; }
         .badge-green { color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; }
         .badge-amber { color: #d97706; background: #fffbeb; border: 1px solid #fde68a; }
         .badge-rose { color: #e11d48; background: #fff1f2; border: 1px solid #fecdd3; }
-        .detail-card { background: #ffffff; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; }
-        .detail-item { display: flex; justify-content: space-between; border-bottom: 1px solid #f8fafc; padding: 8px 0; font-size: 13px; }
+        .detail-card { background: #ffffff; padding: 18px; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 14px; }
+        .detail-item { display: flex; justify-content: space-between; border-bottom: 1px solid #f8fafc; padding: 10px 0; }
         .hidden { display: none; }
     </style>
 </head>
@@ -122,7 +122,7 @@
                 <div class="q-title">員工距離前次任職，中斷期間是否超過6個月?</div>
                 <div class="q-desc">例如前一任職12/31離職；本次8/1到職則有超過6個月</div>
                 
-                <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
+                <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px;">
                     <div>
                         <label>前一身份離職日期 (D1)</label>
                         <input type="date" id="inputD1">
@@ -131,10 +131,10 @@
                         <label>本次預計到職日期 (D2)</label>
                         <input type="date" id="inputD2">
                     </div>
-                    <div id="calcResultD" style="font-size: 13px; font-weight: 700; color: #4f46e5; padding: 8px; background: #eef2ff; border-radius: 8px; display: none;"></div>
+                    <div id="calcResultD" style="font-size: 14px; font-weight: 700; color: #4f46e5; padding: 10px; background: #eef2ff; border-radius: 8px; display: none;"></div>
                 </div>
 
-                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                <div style="display: flex; gap: 12px; margin-bottom: 10px;">
                     <button class="btn-secondary" onclick="calcStepD()" style="flex: 1; margin-top:0;">試算</button>
                     <button class="btn-primary" onclick="confirmStepD()" style="flex: 1; margin-top:0;">確認</button>
                 </div>
@@ -144,12 +144,12 @@
             <!-- 通用結果顯示區 (結果A, B, C) -->
             <div id="identityResultBox" class="step-box">
                 <div id="identityResultContent"></div>
-                <button class="btn-primary" onclick="resetIdentityWizard()" style="margin-top: 15px;">重新判定</button>
+                <button class="btn-primary" onclick="resetIdentityWizard()" style="margin-top: 20px;">重新判定</button>
             </div>
 
         </div>
 
-        <!-- 按鈕二：回任年資計算內容（銜接前次程式碼） -->
+        <!-- 按鈕二：回任年資計算內容 -->
         <div id="seniorityTab" class="content tab-pane">
             <div class="section">
                 <div class="section-header">
@@ -194,15 +194,15 @@
             <button onclick="calculateSeniority()" class="btn-calc">試算按鈕</button>
 
             <div id="resultSection" class="result-box hidden">
-                <div style="font-weight: 700; font-size: 15px;">試算結果</div>
+                <div style="font-weight: 700; font-size: 16px;">試算結果</div>
                 
                 <div class="result-card">
-                    <span style="font-size: 14px; color: #475569;">特休年資類型：</span>
+                    <span style="color: #475569;">特休年資類型：</span>
                     <span id="resCategory"></span>
                 </div>
 
                 <div id="layer2Container" class="detail-card">
-                    <div style="font-size: 12px; font-weight: 700; color: #4f46e5; margin-bottom: 8px;">第二層詳細計算明細</div>
+                    <div style="font-size: 13px; font-weight: 700; color: #4f46e5; margin-bottom: 10px;">第二層詳細計算明細</div>
                     <div id="layer2Details"></div>
                 </div>
             </div>
@@ -211,7 +211,6 @@
     </div>
 
     <script>
-        // 頁籤切換控制
         function switchTab(tabId) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
@@ -225,13 +224,11 @@
             }
         }
 
-        // 身份判斷導引步驟控制
         function goToStep(stepId) {
             document.querySelectorAll('#identityTab .step-box').forEach(el => el.classList.remove('active'));
             document.getElementById(stepId).classList.add('active');
         }
 
-        // 步驟D的試算功能
         function calcStepD() {
             const d1Val = document.getElementById('inputD1').value;
             const d2Val = document.getElementById('inputD2').value;
@@ -250,7 +247,6 @@
                 return;
             }
 
-            // 以月計算間隔
             let months = (d2.getFullYear() - d1.getFullYear()) * 12;
             months -= d1.getMonth();
             months += d2.getMonth();
@@ -261,7 +257,6 @@
             resDiv.innerText = `試算結果：中斷約 ${months} 個月 ➔ 判定為「${isGt6 ? '是 (大於6個月)' : '否 (小於6個月)'}」`;
         }
 
-        // 步驟D的確認按鈕邏輯
         function confirmStepD() {
             const d1Val = document.getElementById('inputD1').value;
             const d2Val = document.getElementById('inputD2').value;
@@ -280,13 +275,12 @@
             if (d2.getDate() < d1.getDate()) months--;
 
             if (months > 6) {
-                showResult('A'); // 大於6個月視同新進員工
+                showResult('A');
             } else {
-                showResult('C'); // 小於6個月為回任員工
+                showResult('C');
             }
         }
 
-        // 顯示結果 A, B, C
         function showResult(type) {
             document.querySelectorAll('#identityTab .step-box').forEach(el => el.classList.remove('active'));
             const resBox = document.getElementById('identityResultBox');
@@ -352,7 +346,7 @@
                         </div>
                         <div class="result-block">
                             <div class="result-block-title">⏳ 特休年資計算</div>
-                            <div class="result-block-content" style="font-weight: normal; font-size: 13px;">
+                            <div class="result-block-content" style="font-weight: normal;">
                                 1. 中斷年資3個月內：合併前一身份完整年資<br>
                                 2. 中斷年資大於3個月、小於6個月：合併前一年身份年資*0.5
                             </div>
@@ -369,7 +363,6 @@
             goToStep('stepA');
         }
 
-        // --- 以下為原本的回任年資計算 JS 邏輯 ---
         function addSegment() {
             const container = document.getElementById('segmentsContainer');
             const count = container.children.length + 1;
