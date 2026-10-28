@@ -21,7 +21,7 @@
             overflow-x: hidden;
         }
 
-        /* 滿版像素大樹背景圖樣 */
+        /* 滿版像素背景 */
         .pixel-bg-pattern {
             position: fixed;
             top: 0;
@@ -564,13 +564,14 @@
                 segments.push({ dateA, dateB, daysC, valA, valB });
             }
 
+            // 依到職日先後排序
             segments.sort((a, b) => a.dateA - b.dateA);
 
             const lastSegment = segments[segments.length - 1];
-            const date3M = new Date(lastSegment.valB);
+            const date3M = new Date(lastSegment.dateB);
             date3M.setMonth(date3M.getMonth() + 3);
 
-            const date6M = new Date(lastSegment.valB);
+            const date6M = new Date(lastSegment.dateB);
             date6M.setMonth(date6M.getMonth() + 6);
 
             let category = "", badgeClass = "";
@@ -599,19 +600,39 @@
                     totalC += seg.daysC;
                 });
 
+                // 精確計算多段之間及最後到新到職日間的中斷(空窗)天數
                 let breakDaysTotal = 0;
-                const prevDayD = new Date(dateD);
-                prevDayD.setDate(prevDayD.getDate() - 1);
-                breakDaysTotal = Math.round((prevDayD.getTime() - segments[segments.length-1].dateB.getTime()) / (1000 * 3600 * 24));
+                for (let i = 0; i < segments.length; i++) {
+                    if (i === 0) {
+                        // 第一段之前沒有中斷
+                        continue;
+                    }
+                    // 計算上一段離職日到當段到職日之間的空窗天數 (例如 6/30 到 8/1 之間的空白天數)
+                    const prevB = segments[i - 1].dateB;
+                    const currA = segments[i].dateA;
+                    const diffTime = currA.getTime() - prevB.getTime();
+                    const diffDays = Math.round(diffTime / (1000 * 3600 * 24)) - 1; // 扣掉前後交接當天
+                    if (diffDays > 0) {
+                        breakDaysTotal += diffDays;
+                    }
+                }
+
+                // 計算最後一段離職日到新到職日 (D) 之間的空窗天數
+                const lastB = lastSegment.dateB;
+                const finalDiffTime = dateD.getTime() - lastB.getTime();
+                const finalDiffDays = Math.round(finalDiffTime / (1000 * 3600 * 24)) - 1;
+                if (finalDiffDays > 0) {
+                    breakDaysTotal += finalDiffDays;
+                }
 
                 let newSeniorityDate = new Date(segments[0].dateA);
                 if (category === "3個月內回任") {
                     newSeniorityDate.setDate(newSeniorityDate.getDate() + totalC + breakDaysTotal);
-                    layer2Details.innerHTML = `原始年資天數：${totalOriginalDays} 天<br>中斷天數：${breakDaysTotal} 天<br><b>新特休起算日：${newSeniorityDate.toISOString().split('T')[0]}</b>`;
+                    layer2Details.innerHTML = `原始年資天數：${totalOriginalDays} 天<br>累計中斷/留停天數：${breakDaysTotal + totalC} 天<br><b>新特休起算日：${newSeniorityDate.toISOString().split('T')[0]}</b>`;
                 } else {
                     const adj = Math.round(totalOriginalDays * 0.5);
-                    newSeniorityDate.setDate(newSeniorityDate.getDate() + adj + breakDaysTotal);
-                    layer2Details.innerHTML = `原始年資折半 (×0.5)：${adj} 天<br>中斷天數：${breakDaysTotal} 天<br><b>新特休起算日：${newSeniorityDate.toISOString().split('T')[0]}</b>`;
+                    newSeniorityDate.setDate(newSeniorityDate.getDate() + adj + totalC + breakDaysTotal);
+                    layer2Details.innerHTML = `原始年資折半 (×0.5)：${adj} 天<br>累計中斷/留停天數：${breakDaysTotal + totalC} 天<br><b>新特休起算日：${newSeniorityDate.toISOString().split('T')[0]}</b>`;
                 }
             }
 
